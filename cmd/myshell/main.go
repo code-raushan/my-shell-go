@@ -18,7 +18,14 @@ func main() {
 		if strings.TrimSpace(input)=="exit 0"{
 			os.Exit(0)
 		}
+
+		switch strings.Split(strings.TrimSpace(input), " ")[0]{
+		case "echo":
+			fmt.Println(strings.Join(strings.Split(input, " ")[1:], " "))
+		default:
+			fmt.Fprintf(os.Stdout, strings.TrimSpace(input)+": command not found\n")
+		}
+	
 		
-		fmt.Fprintf(os.Stdout, strings.TrimSpace(input)+": command not found\n")
 	}
 }
