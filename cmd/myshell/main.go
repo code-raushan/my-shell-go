@@ -19,13 +19,25 @@ func main() {
 			os.Exit(0)
 		}
 
+		args := strings.Split(strings.TrimSpace(input), " ")[1:]
+
 		switch strings.Split(strings.TrimSpace(input), " ")[0]{
 		case "echo":
-			fmt.Fprintf(os.Stdout, strings.Join(strings.Split(input, " ")[1:], " "))
+			result := strings.Join(strings.Split(input, " ")[1:], " ")
+			fmt.Fprint(os.Stdout, result)
+		case "type":
+			if len(args) == 1 {
+				switch args[0]{
+				case "exit", "echo", "type":
+					fmt.Fprintf(os.Stdout, "%s is a shell builtin\n", args[0])
+				default: 
+					fmt.Fprintf(os.Stdout, "%s: not found\n", args[0])
+				}
+			} else {
+				fmt.Fprint(os.Stdout, "too many arguments\n")
+			}
 		default:
 			fmt.Fprintf(os.Stdout, strings.TrimSpace(input)+": command not found\n")
 		}
-	
-		
 	}
 }
