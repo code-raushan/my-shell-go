@@ -14,6 +14,11 @@ func main() {
 		if err != nil {
 			fmt.Printf("error occured while reading the shell input %v\n", err)
 		}
+
+		if strings.TrimSpace(input)=="exit 0"{
+			os.Exit(0)
+		}
+		
 		fmt.Fprintf(os.Stdout, strings.TrimSpace(input)+": command not found\n")
 	}
 }
