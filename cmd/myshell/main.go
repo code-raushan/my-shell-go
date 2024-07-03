@@ -21,7 +21,7 @@ func main() {
 
 		switch strings.Split(strings.TrimSpace(input), " ")[0]{
 		case "echo":
-			fmt.Println(strings.Join(strings.Split(input, " ")[1:], " "))
+			fmt.Fprintf(os.Stdout, strings.Join(strings.Split(input, " ")[1:], " "))
 		default:
 			fmt.Fprintf(os.Stdout, strings.TrimSpace(input)+": command not found\n")
 		}
