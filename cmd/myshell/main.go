@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -32,16 +31,21 @@ func main() {
 				case "exit", "echo", "type":
 					fmt.Fprintf(os.Stdout, "%s is a shell builtin\n", args[0])
 				default:
-					paths := strings.Split(os.Getenv("PATH"), ":")
+					path_var := os.Getenv("PATH")
+					paths := strings.Split(path_var, ":")
+
+					found := false
 
 					for _, path := range paths {
-						fpath := filepath.Join(path, args[0])
-						if _, err := os.Stat(fpath); err != nil{
-							fmt.Fprintf(os.Stdout, "%s is %s\n", args[0], fpath)
-							return
+						if _, err := os.Stat(path + "/" + args[0]); err == nil{
+							fmt.Fprintf(os.Stdout, "%s is %s/%s\n", args[0], path, args[0])
+							found = true
+							break
 						}
 					}
-					fmt.Fprintf(os.Stdout, "%s: not found\n", args[0])
+					if !found {
+						fmt.Fprintf(os.Stdout, "%s: not found\n", args[0])
+					}
 				}
 			} else {
 				fmt.Fprint(os.Stdout, "too many arguments\n")
