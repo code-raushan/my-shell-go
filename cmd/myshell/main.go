@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -19,9 +20,10 @@ func main() {
 			os.Exit(0)
 		}
 
+		cmd := strings.Split(strings.TrimSpace(input), " ")[0]
 		args := strings.Split(strings.TrimSpace(input), " ")[1:]
 
-		switch strings.Split(strings.TrimSpace(input), " ")[0]{
+		switch cmd{
 		case "echo":
 			result := strings.Join(strings.Split(input, " ")[1:], " ")
 			fmt.Fprint(os.Stdout, result)
@@ -51,7 +53,17 @@ func main() {
 				fmt.Fprint(os.Stdout, "too many arguments\n")
 			}
 		default:
-			fmt.Fprintf(os.Stdout, strings.TrimSpace(input)+": command not found\n")
+			// fmt.Fprintf(os.Stdout, strings.TrimSpace(input)+": command not found\n")
+			command := exec.Command(args[0], args...)
+			command.Stderr = os.Stderr
+			command.Stdout = os.Stdout
+
+			err := command.Run()
+			if err != nil {
+				fmt.Fprintf(os.Stdout, cmd+": command not found\n")
+			}
+
+			// fmt.Fprintf(os.Stdout, strings.TrimSpace(input)+": command not found\n")
 		}
 	}
 }
